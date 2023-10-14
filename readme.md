@@ -31,7 +31,7 @@ A job board web application built using Django and Tailwind CSS. This project al
 
 -   **Django**: A high-level Python web framework.
 -   **Tailwind CSS**: A utility-first CSS framework for creating sleek and responsive designs.
--   **[Add other technologies used, such as the database, email service, etc.]**
+-   **Sqlite**: A serverless database
 
 ## Installation
 
