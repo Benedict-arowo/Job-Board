@@ -1,0 +1,11 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+
+{% block content %}
+<form method="POST" action="/auth/login/">
+	{% csrf_token %}
+	<h1>Login</h1>
+	<input type="email" name="email" id="email">
+	<input type="password" name="password" id="password">
+	<input type="submit" value="Submit">
+</form>
+{% endblock %}
