@@ -6,7 +6,7 @@ from .forms import RegisterForm
 from .models import CustomUser
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-
+from custom_decorators import guest_only
 
 def index(request):
     # To make sure the user is not logged in already
@@ -39,7 +39,7 @@ def loginUser(request):
         messages.error(request, "Invalid username or password has been provided")
         return redirect("/auth")
 
-
+@guest_only
 def registerUser(request):
     if request.method == "POST":
         email = request.POST.get("email")
