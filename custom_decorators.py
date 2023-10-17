@@ -4,7 +4,7 @@ def guest_only(view_func):
     def _wrapped_view(request, *args, **kwargs):
         if request.user.is_authenticated:
             # Redirect logged-in users to a different page.
-            return redirect('jobboard:home')  
+            return redirect('jobboard:index')  
         return view_func(request, *args, **kwargs)
 
     return _wrapped_view
