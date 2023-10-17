@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=255)
     role = models.CharField(max_length=16, choices=EMPLOYMENT_ROLE_CHOICES)
     profile_picture = models.FileField(upload_to="profile-pictures/", null=True)
+    verified_email = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = "email"
