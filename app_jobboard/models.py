@@ -23,7 +23,7 @@ class Job(models.Model):
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
     skills_required = models.CharField(max_length=255)
-    application_deadline = models.DateTimeField()
+    application_deadline = models.DateTimeField(blank=True, null=True)
     employment_type = models.CharField(max_length=100, choices=EMPLOYMENT_TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
     salary = models.IntegerField()
@@ -63,4 +63,4 @@ class JobCategory(models.Model):
         verbose_name_plural = "Job Categories"
 
     def __str__(self):
-        return {self.name}
+        return self.name

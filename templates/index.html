@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+{% extends "base.html" %} {% block title %} - Register {% endblock %} 
 
 {% block content %}
 <div>
@@ -13,5 +13,23 @@
 		{% endif %}
 	</nav>
 	<h1>Welcome to JobBoard</h1>
+
+	<form action="/createJob/" method="POST" class="flex flex-col gap-2 mt-4">
+		{% csrf_token %}
+		<input type="text" placeholder="name" name="name" id="name" />
+		<input type="text" placeholder="description" name="description" id="description" />
+		<input type="text" placeholder="company_name" name="company_name" id="company_name" />
+		<input type="text" placeholder="location" name="location" id="location" />
+		<input type="text" placeholder="skills_required" name="skills_required" id="skills_required" />
+		<input type="date" placeholder="application_deadline_date" name="application_deadline_date" id="application_deadline_date" />
+		<input type="time" placeholder="application_deadline_time" name="application_deadline_time" id="application_deadline_time" />
+		<input type="text" placeholder="employment_type" name="employment_type" id="employment_type" />
+		<input type="text" placeholder="salary" name="salary" id="salary" />
+		<input type="text" placeholder="currency" name="currency" id="currency" />
+		<input type="text" placeholder="apply_link" name="apply_link" id="apply_link" />
+		<input type="text" placeholder="category" name="category" id="category" />
+        <button type="submit" class="bg-red-400 text-white py-2">Submit</button>
+
+	</form>
 </div>
 {% endblock %}
