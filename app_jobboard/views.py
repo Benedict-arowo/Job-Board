@@ -4,55 +4,75 @@ from django.contrib import messages
 from .models import Job, JobCategory
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from custom_decorators import employer_only
+from .forms import JobForm
 
 
 # Create your views here.
 def index(request):
-    return render(request, "index.html")
+    id = request.GET.get('job')
+    print(id)
+    if not id:
+        job = None
+    else:
+        job = Job.objects.get(id=id)
+
+    context = { "jobs": Job.objects.all(), "job": job }
+    return render(request, "index.html", context)
+
+def getJob(request, id):
+    job = Job.objects.get(id=id)
+    context = { "job": job }
+    return render(request, "jobboard/job.html", context)
 
 
 @login_required(login_url="auth:index")
-@require_http_methods(["POST"])
+@employer_only
 def createJob(request):
-    name = request.POST.get("name")
-    description = request.POST.get("description")
-    company_name = request.POST.get("company_name")
-    location = request.POST.get("location")
-    skills_required = request.POST.get("skills_required")
-    application_deadline_date = request.POST["application_deadline_date"]
-    application_deadline_time = request.POST.get("application_deadline_time")
-    employment_type = request.POST.get("employment_type")
-    salary = request.POST.get("salary")
-    currency = request.POST.get("currency")
-    apply_link = request.POST.get("apply_link")
-    category = request.POST.get("category")
-
-# TODO: Validations
-    if not name:
-        messages.error(request, "Please provide a name for this job posting.")
-        return redirect()
+    form = JobForm()
+    if request.method == "POST":
+        jobForm = JobForm(request.POST)
+        if not jobForm.is_valid():
+            print(jobForm.errors)
+        if jobForm.is_valid():
+            form = jobForm.save(commit=False)
+            form.employer = request.user
+            form.save()
+    context = {"form": form}
+    return render(request, "jobboard/createJob.html", context)
 
 
+@login_required(login_url="auth:index")
+@employer_only
+def editJob(request, id):
+    jobInstance = Job.objects.get(id=id)
+    form = JobForm(instance= jobInstance)
+    if request.method == "POST":
+        jobForm = JobForm(request.POST, instance=jobInstance)
+
+        if not jobForm.is_valid():
+            print(jobForm.errors)
+
+        if jobForm.is_valid():
+            form = jobForm.save(commit=False)
+            form.employer = request.user
+            form.save()
+
+    context = {"form": form, "id": id}
+    return render(request, "jobboard/editJob.html", context)
+
+
+@login_required(login_url="auth:index")
+@employer_only
+def deleteJob(request, id):
     try:
-        category, status = JobCategory.objects.get_or_create(name=category)
-        job = Job.objects.create(
-            category=category,
-            employer=request.user,
-            name=name,
-            description=description,
-            company_name=company_name,
-            location=location,
-            skills_required=skills_required,
-            employment_type=employment_type,
-            application_deadline=f"{application_deadline_date} {application_deadline_time}",
-            is_active=True,
-            salary=salary,
-            currency=currency,
-            apply_link=apply_link,
-        )
-        job.save()
+        job = Job.objects.get(id=id)
     except:
-        messages.error(request, "Error while trying to create your job posting.")
+        messages.error(request, "Job with the id provided was not found.")
         return redirect("jobboard:index")
 
+    if job.employer != request.user:
+        messages.error(request, "You do not have the permission to delete this job.")
+        return redirect("jobboard:index")
+    job.delete()
     return redirect("jobboard:index")

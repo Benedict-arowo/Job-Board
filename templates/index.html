@@ -1,35 +1,100 @@
-{% extends "base.html" %} {% block title %} - Register {% endblock %} 
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+{% load static %}
+
+<!-- {% block js %}
+	<script>
+		const searchInput = document.getElementById("q")
+		console.log(searchInput)
+		searchInput.addEventListener("onchange", (e) => {
+			const urlParams = new URLSearchParams(window.location.search);
+			console.log(searchInput.target)
+			urlParams.set('q', searchInput.target.value);
+			window.location.search = urlParams;
+		})
+		</script>
+{% endblock %} -->
+
+{% block aboveContent%}
+	<div class="flex flex-col gap-4">
+
+		<input type="text" name="q" id="q" placeholder="Job title, company or keywords" class="mx-40 mt-12 py-3 rounded-md font-light">
+
+		<div class="flex flex-row gap-8 justify-center mt-2">
+			<p class="font-medium text-xl">Job Feed</p>
+			<p class="font-light text-xl">Recent Searches</p>
+		</div>
+
+		<hr>
+	</div>
+{% endblock %}
 
 {% block content %}
-<div>
-	<nav>
-		{% if request.user.is_authenticated %}
-		<p>
-			Logged in as {{ request.user.first_name }} {{ request.user.last_name }}
-		</p>
-		<a href="/auth/logout">Logout</a>
-		{% else %}
-		<a href="/auth">Login</a>
-		{% endif %}
-	</nav>
-	<h1>Welcome to JobBoard</h1>
+<div class="flex flex-row justify-center gap-4 pt-8 relative mb-4">
+	<div class="flex flex-col gap-2 mb-4">
+		{% for job in jobs %}
+		<div class="justify-between border max-w-[500px] px-4 py-3 rounded-sm">
+			<div class="flex flex-row justify-between">
+				<a href="{% url 'jobboard:index' %}?job={{ job.id }}" class="text-xl">{{ job.name }}</a>
+				{% if job.employer == request.user %}
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+				</svg>
+				{% endif %}
+				  
+			</div>
+			<div class="flex flex-row gap-2 font-light text-slate-600">
+				<p>{{ job.company_name }}</p>
+				|
+				<p class="font-normal">{{ job.location }}</p>
+			</div>
+			<div class="flex flex-row gap-4 px-2 text-sm mt-2">
+				{% if job.salary %}
+				<p class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm">${{ job.salary }} monthly</p>
 
-	<form action="/createJob/" method="POST" class="flex flex-col gap-2 mt-4">
-		{% csrf_token %}
-		<input type="text" placeholder="name" name="name" id="name" />
-		<input type="text" placeholder="description" name="description" id="description" />
-		<input type="text" placeholder="company_name" name="company_name" id="company_name" />
-		<input type="text" placeholder="location" name="location" id="location" />
-		<input type="text" placeholder="skills_required" name="skills_required" id="skills_required" />
-		<input type="date" placeholder="application_deadline_date" name="application_deadline_date" id="application_deadline_date" />
-		<input type="time" placeholder="application_deadline_time" name="application_deadline_time" id="application_deadline_time" />
-		<input type="text" placeholder="employment_type" name="employment_type" id="employment_type" />
-		<input type="text" placeholder="salary" name="salary" id="salary" />
-		<input type="text" placeholder="currency" name="currency" id="currency" />
-		<input type="text" placeholder="apply_link" name="apply_link" id="apply_link" />
-		<input type="text" placeholder="category" name="category" id="category" />
-        <button type="submit" class="bg-red-400 text-white py-2">Submit</button>
-
-	</form>
+				{% endif %}
+				<p class="bg-slate-200 text-slate-700 w-fit px-3">{{ job.employment_type }}</p>
+			</div>
+			<section aria-label="job summary" class="my-2">
+				<ul class="list-disc list-inside font-light text-gray-600">
+					<li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia, aperiam?</li>
+					<li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia, aperiam?</li>
+					<li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia, aperiam?</li>
+				</ul>
+			</section>
+			<footer aria-label="job footer" class="mt-2">
+				<p class="font-light text-xs text-gray-600">Posted {{ job.created_at|timesince }} ago.</p>
+			</footer>
+		</div>
+		{% endfor %}
+	</div>
+	<aside class="w-full h-screen sticky top-0 border py-4 max-w-[500px]">
+		<header class="shadow-md p-4 flex flex-col gap-2" aria-label="aside job header">
+			<h3 class="text-xl font-semibold">{{ job.name }}</h3>
+			<a class="underline text-blue-500 text-sm cursor-pointer font-light">{{ job.company_name }}</a>
+			<p class="text-slate-600 font-light">{{ job.location }}</p>
+			<div class="flex flex-row gap-2">
+				<p class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm w-fit">${{ job.salary }} monthly</p>
+				<p class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm w-fit">${{ job.employment_type }} </p>
+			</div>
+			<div class="flex flex-row gap-2 items-center">
+				<button class="w-fit bg-blue-800 text-white px-4 py-2 rounded-lg">Apply Now</button>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 cursor-pointer h-10 p-2 rounded-full bg-gray-400 text-white">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+				</svg>				  
+			</div>
+		</header>
+		<div class="p-4 h-full overflow-auto mb-4">
+			<p class="font-light text-sm">{{ job.description }}</p>
+			<p>EMPLOYER: {{ job.employer.username }}</p>
+			<p>{{ job.skills_required }}</p>
+			<p>Category: {{ job.category }}</p>
+			<a href="{{ job.apply_link}}" class="bg-red-300 px-2 py-1 text-white">Apply Here</a>
+		</div>
+		<button>Report Job</button>
+	</aside>
 </div>
 {% endblock %}
+
+
+<button class="bg-red-300 px-2 py-1"><a href="{% url 'jobboard:editJob' job.id %}">Edit</a></button>
+<button class="bg-red-300 px-2 py-1"><a href="{% url 'jobboard:deleteJob' job.id %}">Delete</a></button>

@@ -18,22 +18,25 @@ EMPLOYMENT_TYPE_CHOICES = (
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    employer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    employer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    # summary = one to many field listed out with li tags in html
     description = models.TextField()
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
-    skills_required = models.CharField(max_length=255)
-    application_deadline = models.DateTimeField(blank=True, null=True)
+    skills_required = models.CharField(max_length=255, blank=True, null=True)
+    # application_deadline = models.DateTimeField(blank=True, null=True)
     employment_type = models.CharField(max_length=100, choices=EMPLOYMENT_TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
-    salary = models.IntegerField()
-    currency = models.CharField(max_length=3, default="USD")
+    salary = models.IntegerField(blank=True, null=True)
+    currency = models.CharField(max_length=3, default="$", blank=True, null=True)
     apply_link = models.CharField(max_length=255)
     category = models.ForeignKey("JobCategory", on_delete=models.SET_NULL, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    
     def __str__(self):
+        # return str(self.id)
         return f"{self.name} at {self.company_name} in {self.location}."
 
 class JobSkill(models.Model):

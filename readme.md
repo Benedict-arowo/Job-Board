@@ -17,6 +17,8 @@ A job board web application built using Django and Tailwind CSS. This project al
 ## Features
 
 - [x] User authentication for job seekers and employers.
+- [ ] Companies, being able to create, delete, and edit a company. 
+- [ ] Company owner being able to add users as employers 
 - [ ] Job posting with details such as job title, description, company name, location, and more.
 - [ ] Job searching with filtering options.
 - [ ] Application submission for job seekers with resume and cover letter attachments.

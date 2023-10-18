@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+
+{% block content %}
+<div>
+	<nav>
+		{% if request.user.is_authenticated %}
+		<p>
+			Logged in as {{ request.user.first_name }} {{ request.user.last_name }}
+		</p>
+		<a href="/auth/logout">Logout</a>
+		{% else %}
+		<a href="/auth">Login</a>
+		{% endif %}
+	</nav>
+	<h1>Welcome to JobBoard</h1>
+
+	<div class="flex flex-col gap-2 mt-4">
+		<h1>{{ job.name }}</h1>
+        <p>{{ job.description }}</p>
+		<p>EMPLOYER: {{ job.employer.username }}</p>
+		<p>Company Name: {{ job.company_name }}</p>
+		<p>Location: {{ job.location }}</p>
+		<p>Location: {{ job.category }}</p>
+		<p>Skills Required: {{ job.skills_required }}</p>
+		<p>Employment Type: {{ job.employment_type }}</p>
+		<p>Salary: {{ job.salary }} {{ job.currency }}</p>
+		<a href="{{ job.apply_link}}" class="bg-red-300 px-2 py-1 text-white">Apply Here</a>
+	</div>
+</div>
+{% endblock %}
