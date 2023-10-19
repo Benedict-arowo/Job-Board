@@ -8,4 +8,8 @@ urlpatterns = [
     path("createJob/", views.createJob, name="createJob"),
     path("editJob/<uuid:id>", views.editJob, name="editJob"),
     path("deleteJob/<uuid:id>", views.deleteJob, name="deleteJob"),
+    path("bookmark/<uuid:jobId>", views.addJobToBookmark, name="addBookmark"),
+    path("remove_bookmark/<uuid:jobId>", views.removeJobFromBookmark, name="removeBookmark"),
 ]
+
+# TODO: Change bookmark, and remove bookmark view to only retun json response

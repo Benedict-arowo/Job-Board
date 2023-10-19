@@ -19,12 +19,11 @@ class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     employer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    # summary = one to many field listed out with li tags in html
+    summary = models.TextField(max_length=255)
     description = models.TextField()
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
     skills_required = models.CharField(max_length=255, blank=True, null=True)
-    # application_deadline = models.DateTimeField(blank=True, null=True)
     employment_type = models.CharField(max_length=100, choices=EMPLOYMENT_TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
     salary = models.IntegerField(blank=True, null=True)
@@ -36,7 +35,6 @@ class Job(models.Model):
 
     
     def __str__(self):
-        # return str(self.id)
         return f"{self.name} at {self.company_name} in {self.location}."
 
 class JobSkill(models.Model):
@@ -67,3 +65,27 @@ class JobCategory(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Search(models.Model):
+    search = models.CharField(max_length=255)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    count = models.IntegerField(default=0)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Searches"
+
+    def __str__(self):
+        return self.search
+    
+class Bookmark(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Bookmarks"
+
+    def __str__(self):
+        return self.job.name
