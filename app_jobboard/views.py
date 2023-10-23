@@ -45,8 +45,9 @@ def index(request):
     context["jobs"] = jobs
 
     if tab == "recent_searches":
-        context["recent_searches"] = Search.objects.filter(user=request.user).order_by("-updated", "-created")
-        context["tab"] = tab
+        if request.user.is_authenticated:
+            context["recent_searches"] = Search.objects.filter(user=request.user).order_by("-updated", "-created")
+            context["tab"] = tab
 
     return render(request, "index.html", context)
 
