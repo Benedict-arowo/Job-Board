@@ -27,7 +27,6 @@ class Job(models.Model):
     employment_type = models.CharField(max_length=100, choices=EMPLOYMENT_TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
     salary = models.CharField(blank=True, null=True, max_length=128)
-    currency = models.CharField(max_length=3, default="$", blank=True, null=True)
     apply_link = models.CharField(max_length=255)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
