@@ -4,7 +4,52 @@
 	{% include "nav_bar.html" %}
 
 	{% block aboveContent%}
-
+		<div class="flex flex-col gap-4">
+			<form
+				action="/"
+				class="flex flex-row gap-4 items-center w-full justify-center px-40 mt-12">
+				{% if q %}
+				<input
+					type="text"
+					name="q"
+					id="q"
+					placeholder="{{ q }}"
+					class="py-3 rounded-md font-light w-full" />
+				{% else %}
+				<input
+					type="text"
+					name="q"
+					id="q"
+					placeholder="Job title, company or keywords"
+					class="py-3 rounded-md font-light w-full" />
+				{% endif %}
+				<button
+					type="submit"
+					class="w-fit h-fit px-4 py-2 bg-blue-500 text-white">
+					Search
+				</button>
+			</form>
+		
+			<div class="flex flex-row gap-8 justify-center mt-2">
+				{% if not user.is_authenticated %}
+					<p class="text-xl font-medium cursor-default text-blue-500">Job Feed</>
+				{% else %}
+					{% if tab == "recent_searches"%}
+					<a href="/?tab=" class="text-xl font-light">Job Feed</a>
+					<a href="/?tab=recent_searches" class="font-medium text-xl text-blue-500"
+						>Recent Searches</a
+					>
+					{% else%}
+					<a href="/?tab=" class="font-medium text-xl text-blue-500">Job Feed</a>
+					<a href="/?tab=recent_searches" class="font-light text-xl"
+						>Recent Searches</a
+					>
+					{% endif %}
+				{% endif %}
+			</div>
+		
+			<hr />
+		</div>
 	{% endblock %}
 
 	<div class="container mx-auto mt-4">
