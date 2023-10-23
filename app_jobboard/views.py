@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from .models import Job, Search, Bookmark
 from django.views.decorators.http import require_http_methods
@@ -88,6 +88,7 @@ def createJob(request):
 def editJob(request, id):
     jobInstance = Job.objects.get(id=id)
     form = JobForm(instance= jobInstance)
+
     if request.method == "POST":
         jobForm = JobForm(request.POST, instance=jobInstance)
 
@@ -98,6 +99,7 @@ def editJob(request, id):
             form = jobForm.save(commit=False)
             form.employer = request.user
             form.save()
+            return redirect('jobboard:job', id=form.id)
 
     context = {"form": form, "id": id}
     return render(request, "jobboard/editJob.html", context)
@@ -116,6 +118,10 @@ def deleteJob(request, id):
         messages.error(request, "You do not have the permission to delete this job.")
         return redirect("jobboard:index")
     job.delete()
+
+    next = request.GET.get('next', '/')
+    if next:
+        return HttpResponseRedirect(next)
     return redirect("jobboard:index")
 
 @login_required(login_url="auth:index")
