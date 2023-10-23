@@ -92,7 +92,7 @@ class Company(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256)
     category = models.ForeignKey(CompanyCategory, on_delete=models.SET_NULL, null=True, blank=True)
-    representative = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 
     def __str__(self):

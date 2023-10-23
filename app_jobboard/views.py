@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .models import Job, Search, Bookmark
+from .models import Job, Search, Bookmark, Company
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from custom_decorators import employer_only
@@ -63,6 +63,15 @@ def getUserJobs(request):
         "jobs": userJobs
     }
     return render(request, "jobboard/manageJobs.html", context)
+
+
+@login_required(login_url="auth:index")
+def getUserCompanies(request):
+    userCompanies = Company.objects.filter(owner=request.user)
+    context = {
+        "companies": userCompanies
+    }
+    return render(request, "jobboard/manageCompanies.html", context)
 
 @login_required(login_url="auth:index")
 @employer_only

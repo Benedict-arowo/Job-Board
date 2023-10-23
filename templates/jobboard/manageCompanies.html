@@ -1,0 +1,33 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+
+{% block searchComponent %}
+
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="w-full text-center text-4xl mt-8 mb-4 text-blue-500 font-bold">My Companies</h1>
+    <div class="flex flex-row justify-between mb-3 gap-8">
+        <input placeholder="Search..." class="px-2 py-1 rounded-sm w-full max-w-[400px]" type="text" name="q">        
+        <p class="font-light text-gray-500 text-sm self-end">Currently displaying {{companies.count}} company</p>
+    </div>
+    <div class="flex flex-col gap-4">
+        {% for company in companies %}
+        <div class="flex flex-row justify-between px-2 py-2 border hover:shadow-md duration-300">
+            <div>
+                <div class="flex flex-row gap-2 items-center">
+                    <a class="block text-lg">{{ company.name }}<a/>
+                        <a href="" class="text-xs w-fit h-fit bg-slate-200 text-slate-700 px-3">
+                            <!-- {{ job.employment_type }} -->
+                        </a>
+                </div>
+                <!-- <a class="text-gray-400 text-sm">{{ job.company.name }}<a/> -->
+            </div>
+
+        </div>
+        {% empty%}
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
