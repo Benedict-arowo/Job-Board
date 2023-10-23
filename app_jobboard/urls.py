@@ -8,6 +8,7 @@ urlpatterns = [
     path("createJob/", views.createJob, name="createJob"),
     path("editJob/<uuid:id>", views.editJob, name="editJob"),
     path("deleteJob/<uuid:id>", views.deleteJob, name="deleteJob"),
+    path("deleteSearch/<int:id>", views.deleteSearch, name="deleteSearch"),
     path("bookmark/<uuid:jobId>", views.addJobToBookmark, name="addBookmark"),
     path("remove_bookmark/<uuid:jobId>", views.removeJobFromBookmark, name="removeBookmark"),
 ]

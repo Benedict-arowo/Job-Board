@@ -69,8 +69,8 @@ def createJob(request):
             form = jobForm.save(commit=False)
             form.employer = request.user
             form.save()
-            print(form.id)
-            return redirect(reverse("jobboard:index") + f"?job={form.id}")
+            return redirect(request, "job")
+            # return redirect(reverse("jobboard:index") + f"?job={form.id}")
     context = {"form": form}
     return render(request, "jobboard/createJob.html", context)
 
@@ -130,3 +130,16 @@ def removeJobFromBookmark(request, jobId):
         messages.error(request, "Job does not exist.")
 
     return redirect("jobboard:index")
+
+@login_required(login_url="auth:index")
+def deleteSearch(request, id):
+    try:
+        search = Search.objects.get(id=id)
+        if search.user == request.user:
+            search.delete()
+        else:
+            raise "You do not have permission to delete this search entry."
+    except:
+        messages.error(request, "Error trying to delete search entry.")
+
+    return redirect(reverse("jobboard:index") + "?tab=recent_searches")
