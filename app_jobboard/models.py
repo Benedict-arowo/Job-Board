@@ -19,17 +19,16 @@ class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     employer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    summary = models.TextField(max_length=255)
+    summary = models.TextField(max_length=256)
     description = models.TextField()
-    company_name = models.CharField(max_length=255)
+    company = models.ForeignKey("Company", on_delete=models.CASCADE, null=True)
     location = models.CharField(max_length=255)
-    skills_required = models.CharField(max_length=255, blank=True, null=True)
+    skills_required = models.TextField(blank=True, null=True)
     employment_type = models.CharField(max_length=100, choices=EMPLOYMENT_TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
-    salary = models.IntegerField(blank=True, null=True)
+    salary = models.CharField(blank=True, null=True, max_length=128)
     currency = models.CharField(max_length=3, default="$", blank=True, null=True)
     apply_link = models.CharField(max_length=255)
-    category = models.ForeignKey("JobCategory", on_delete=models.SET_NULL, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -56,7 +55,7 @@ class JobApplication(models.Model):
         verbose_name_plural = "Job Applications"
 
 
-class JobCategory(models.Model):
+class CompanyCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
@@ -89,3 +88,9 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return self.job.name
+    
+class Company(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    name = models.CharField(max_length=256)
+    category = models.ForeignKey(CompanyCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    representative = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

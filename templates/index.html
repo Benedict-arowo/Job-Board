@@ -1,150 +1,171 @@
 {% extends "layout.html" %} {% block title %} - Register {% endblock %} 
-{% load static %}
 
+{% load static %} 
 {% block js %}
 	<script>
-		const searchInput = document.getElementById("q")
+		const searchInput = document.getElementById("q");
 		searchInput.addEventListener("change", (e) => {
 			const urlParams = new URLSearchParams(window.location.search);
-			urlParams.set('q', e.target.value);
+			urlParams.set("q", e.target.value);
 			window.location.search = urlParams;
-		})
-		</script>
-{% endblock %}
+		});
+</script>
+{% endblock %} 
 
-{% block aboveContent%}
-	<div class="flex flex-col gap-4">
+{% block aboveContent %}
+<div class="flex flex-col gap-4">
+	<form
+		action=""
+		class="flex flex-row gap-4 items-center w-full justify-center px-40 mt-12">
+		{% if q %}
+		<input
+			type="text"
+			name="q"
+			id="q"
+			placeholder="{{ q }}"
+			class="py-3 rounded-md font-light w-full" />
+		{% else %}
+		<input
+			type="text"
+			name="q"
+			id="q"
+			placeholder="Job title, company or keywords"
+			class="py-3 rounded-md font-light w-full" />
+		{% endif %}
+		<button
+			type="submit"
+			class="w-fit h-fit px-4 py-2 bg-blue-500 text-white">
+			Search
+		</button>
+	</form>
 
-		<form action="" class="flex flex-row gap-4 items-center w-full justify-center px-40 mt-12">
-			{% if q %}
-				<input type="text" name="q" id="q" placeholder="{{ q }}" class="py-3 rounded-md font-light w-full">
-			{% else %}
-				<input type="text" name="q" id="q" placeholder="Job title, company or keywords" class="py-3 rounded-md font-light w-full">
-			{% endif %}
-			<button type="submit" class="w-fit h-fit px-4 py-2 bg-blue-500 text-white">Search</button>
-		</form>
+	<div class="flex flex-row gap-8 justify-center mt-2">
+		{% if tab == "recent_searches"%}
+		<a href="?tab=" class="text-xl font-light">Job Feed</a>
+		<a href="?tab=recent_searches" class="font-medium text-xl text-blue-500"
+			>Recent Searches</a
+		>
+		{% else%}
+		<a href="?tab=" class="font-medium text-xl text-blue-500">Job Feed</a>
+		<a href="?tab=recent_searches" class="font-light text-xl"
+			>Recent Searches</a
+		>
+		{% endif %}
+	</div>
 
-		<div class="flex flex-row gap-8 justify-center mt-2">
-			{% if tab == "recent_searches"%}
-				<a href="?tab=" class="text-xl font-light">Job Feed</a>
-				<a href="?tab=recent_searches" class="font-medium text-xl text-blue-500">Recent Searches</a>
-			{% else%}
-				<a href="?tab=" class="font-medium text-xl text-blue-500">Job Feed</a>
-				<a href="?tab=recent_searches" class="font-light text-xl">Recent Searches</a>
-			{% endif %}
+	<hr />
+</div>
+{% endblock %} 
+
+{% block content %} 
+{% if tab != "recent_searches" %} 
+{% if q %}
+<a href="?q=" class="font-light text-gray-500 text-sm underline cursor-pointer"
+	>Clear search</a
+>
+{% endif %}
+<div class="flex flex-row justify-center gap-4 pt-8 relative mb-4">
+	<div class="flex flex-col gap-2 mb-4">
+		{% for job in jobs %}
+		<div class="justify-between border max-w-[500px] px-4 py-3 rounded-sm">
+			<div class="flex flex-row justify-between">
+				<a
+					href="{% url 'jobboard:job' job.id %}"
+					class="text-xl"
+					>{{ job.name }}</a
+				>
+				{% if job.employer == request.user %}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+				</svg>
+				{% endif %}
+			</div>
+			<div class="flex flex-row gap-2 font-light text-slate-600">
+				<p>{{ job.company_name }}</p>
+				|
+				<p class="font-normal">{{ job.location }}</p>
+			</div>
+			<div class="flex flex-row gap-4 px-2 text-sm mt-2">
+				{% if job.salary %}
+				<p
+					class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm">
+					${{ job.salary }} monthly
+				</p>
+
+				{% endif %}
+				<a href="/?q={{ job.employment_type }}" class="bg-slate-200 text-slate-700 w-fit px-3">
+					{{ job.employment_type }}
+				</a>
+			</div>
+			<section
+				aria-label="job summary"
+				class="my-2 font-light text-gray-500">
+				{{ job.summary }}
+			</section>
+			<footer aria-label="job footer" class="mt-2">
+				<p class="font-light text-xs text-gray-600">
+					Posted {{ job.created_at|timesince }} ago.
+				</p>
+			</footer>
+		</div>
+		{% empty %} {% if q %}
+		<div class="w-full flex flex-col justify-start text-gray-400">
+			<p class="text-2xl font-light">
+				The search <strong>"{{ q }}"</strong> did not match any jobs.
+			</p>
+			<h4 class="font-medium text-lg mt-4 text-gray-500">
+				Search suggestions:
+			</h4>
+			<ul class="list-disc list-inside font-light">
+				<li>Try more general keywords</li>
+				<li>Check your spelling</li>
+				<li>Replace abbreviations with the entire word</li>
+			</ul>
 		</div>
 
-		<hr>
-	</div>
-{% endblock %}
-
-{% block content %}
-	{% if tab != "recent_searches" %}
-		{% if q %}
-		<a href="?q=" class="font-light text-gray-500 text-sm underline cursor-pointer">Clear search</a>
-		{% endif %}
-		<div class="flex flex-row justify-center gap-4 pt-8 relative mb-4">
-			<div class="flex flex-col gap-2 mb-4">
-				{% for job in jobs %}
-				<div class="justify-between border max-w-[500px] px-4 py-3 rounded-sm">
-					<div class="flex flex-row justify-between">
-						<a href="{% url 'jobboard:index' %}?job={{ job.id }}" class="text-xl">{{ job.name }}</a>
-						{% if job.employer == request.user %}
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
-						</svg>
-						{% endif %}
-						
-					</div>
-					<div class="flex flex-row gap-2 font-light text-slate-600">
-						<p>{{ job.company_name }}</p>
-						|
-						<p class="font-normal">{{ job.location }}</p>
-					</div>
-					<div class="flex flex-row gap-4 px-2 text-sm mt-2">
-						{% if job.salary %}
-						<p class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm">${{ job.salary }} monthly</p>
-
-						{% endif %}
-						<p class="bg-slate-200 text-slate-700 w-fit px-3">{{ job.employment_type }}</p>
-					</div>
-					<section aria-label="job summary" class="my-2 font-light text-gray-500">
-						{{ job.summary }}
-					</section>
-					<footer aria-label="job footer" class="mt-2">
-						<p class="font-light text-xs text-gray-600">Posted {{ job.created_at|timesince }} ago.</p>
-					</footer>
-				</div>
-				{% empty %}
-					{% if q %}
-					<div class="w-full flex flex-col justify-start text-gray-400">
-						<p class="text-2xl  font-light"> The search <strong>"{{ q }}"</strong> did not match any jobs.</p>
-						<h4 class="font-medium text-lg mt-4 text-gray-500">
-							Search suggestions:
-						</h4>
-						<ul class="list-disc list-inside font-light">
-							<li>Try more general keywords</li>
-							<li>Check your spelling</li>
-							<li>Replace abbreviations with the entire word</li>
-						</ul>
-
-					</div>
-						
-					{% else %}
-						<p>There are currently no jobs available.</p>
-					{% endif %}
-				{% endfor %}
-			</div>
-			{% if job %}
-				<aside class="w-full h-screen sticky top-0 border py-4 max-w-[500px]">
-					<header class="shadow-md p-4 flex flex-col gap-2" aria-label="aside job header">
-						<h3 class="text-xl font-semibold">{{ job.name }}</h3>
-						<a class="underline text-blue-500 text-sm cursor-pointer font-light">{{ job.company_name }}</a>
-						<p class="text-slate-600 font-light">{{ job.location }}</p>
-						<div class="flex flex-row gap-2">
-							{% if job.salary %}
-								<p class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm w-fit">${{ job.salary }} monthly</p>
-							{% endif %}
-							<p class="bg-slate-100 text-slate-600 px-3 border border-slate-400 rounded-sm w-fit">${{ job.employment_type }} </p>
-						</div>
-						<div class="flex flex-row gap-2 items-center">
-							<button class="w-fit bg-blue-800 text-white px-4 py-2 rounded-lg">Apply Now</button>
-							{% if bookmarked %}		  
-								<p>Bookmarked</p>
-							{% else %}
-								<a href="{% url 'jobboard:addBookmark' job.id %}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 cursor-pointer h-10 p-2 rounded-full bg-gray-400 text-white">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-									</svg>		</a>
-							{% endif %}
-						</div>
-					</header>
-					<div class="p-4 h-full overflow-y-scroll">
-						<p class="font-light text-sm">{{ job.description }}</p>
-						<p>EMPLOYER: {{ job.employer.username }}</p>
-						<p>{{ job.skills_required }}</p>
-						<p>Category: {{ job.category }}</p>
-						<a href="{{ job.apply_link}}" class="bg-red-300 px-2 py-1 text-white">Apply Here</a>
-						<button>Report Job</button>
-					</div>
-				</aside>
-			</div>
-			{% endif %}
 		{% else %}
-			<!-- Recent Searches Tab -->
-			<section class="text-black flex flex-col gap-2">
-				<h3 class="font-medium text-xl">Here are your recent searches...</h3>
-				{% for search in recent_searches %}
-				<div class="flex flex-row py-2 px-4 border mx-12 w-full justify-between">
-					<a href="?q={{ search.search }}&tab=" class="font-light">{{ search.search }}</a>
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 cursor-pointer">
-						<path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
-					</svg>					  
-				</div>
-				{% endfor %}
-			</section>
-		{% endif %}
-{% endblock %}
+		<p>There are currently no jobs available.</p>
+		{% endif %} {% endfor %}
+	</div>
 
+	{% else %}
+	<!-- Recent Searches Tab -->
+	<section class="text-black flex flex-col gap-2">
+		<h3 class="font-medium text-xl">Here are your recent searches...</h3>
+		{% for search in recent_searches %}
+		<div
+			class="flex flex-row py-2 px-4 border mx-12 w-full justify-between">
+			<a href="?q={{ search.search }}&tab=" class="font-light"
+				>{{ search.search }}</a
+			>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+				class="w-5 h-5 cursor-pointer">
+				<path
+					fill-rule="evenodd"
+					d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+					clip-rule="evenodd" />
+			</svg>
+		</div>
+		{% endfor %}
+	</section>
+	{% endif %} {% endblock %}
 
-<button class="bg-red-300 px-2 py-1"><a href="{% url 'jobboard:editJob' job.id %}">Edit</a></button>
-<button class="bg-red-300 px-2 py-1"><a href="{% url 'jobboard:deleteJob' job.id %}">Delete</a></button>
+	<button class="bg-red-300 px-2 py-1">
+		<a href="{% url 'jobboard:editJob' job.id %}">Edit</a>
+	</button>
+	<button class="bg-red-300 px-2 py-1">
+		<a href="{% url 'jobboard:deleteJob' job.id %}">Delete</a>
+	</button>
+</div>

@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Job, JobCategory, Search, Bookmark
+from .models import Job, Search, Bookmark
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from custom_decorators import employer_only
 from django.db.models import Q
 from .forms import JobForm
-
+from django.urls import reverse
 
 # Create your views here.
 def index(request):
@@ -35,10 +35,12 @@ def index(request):
         job = Job.objects.get(id=id)
         context["job"] = job
 
-        bookmarked = Bookmark.objects.get(job=job, user=request.user)
-
-        if bookmarked is not None:
-            context["bookmarked"] = True
+        try:
+            bookmarked = Bookmark.objects.get(job=job, user=request.user)
+            if bookmarked:
+                context["bookmarked"] = True
+        except:
+            pass
 
     context["jobs"] = jobs
 
@@ -66,6 +68,8 @@ def createJob(request):
             form = jobForm.save(commit=False)
             form.employer = request.user
             form.save()
+            print(form.id)
+            return redirect(reverse("jobboard:index") + f"?job={form.id}")
     context = {"form": form}
     return render(request, "jobboard/createJob.html", context)
 

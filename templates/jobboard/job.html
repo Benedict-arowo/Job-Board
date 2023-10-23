@@ -1,30 +1,77 @@
 {% extends "layout.html" %} {% block title %} - Register {% endblock %} 
 
+
+{% block aboveContent %}
+<div class="flex flex-col gap-4">
+	<form
+		action=""
+		class="flex flex-row gap-4 items-center w-full justify-center px-40 mt-12">
+		{% if q %}
+		<input
+			type="text"
+			name="q"
+			id="q"
+			placeholder="{{ q }}"
+			class="py-3 rounded-md font-light w-full" />
+		{% else %}
+		<input
+			type="text"
+			name="q"
+			id="q"
+			placeholder="Job title, company or keywords"
+			class="py-3 rounded-md font-light w-full" />
+		{% endif %}
+		<button
+			type="submit"
+			class="w-fit h-fit px-4 py-2 bg-blue-500 text-white">
+			Search
+		</button>
+	</form>
+
+	<div class="flex flex-row gap-8 justify-center mt-2">
+		{% if tab == "recent_searches"%}
+		<a href="?tab=" class="text-xl font-light">Job Feed</a>
+		<a href="?tab=recent_searches" class="font-medium text-xl text-blue-500"
+			>Recent Searches</a
+		>
+		{% else%}
+		<a href="?tab=" class="font-medium text-xl text-blue-500">Job Feed</a>
+		<a href="?tab=recent_searches" class="font-light text-xl"
+			>Recent Searches</a
+		>
+		{% endif %}
+	</div>
+
+	<hr />
+</div>
+{% endblock %}
+
 {% block content %}
 <div>
-	<nav>
-		{% if request.user.is_authenticated %}
-		<p>
-			Logged in as {{ request.user.first_name }} {{ request.user.last_name }}
-		</p>
-		<a href="/auth/logout">Logout</a>
-		{% else %}
-		<a href="/auth">Login</a>
-		{% endif %}
-	</nav>
-	<h1>Welcome to JobBoard</h1>
+	<h3 class="font-semibold text-2xl">{{ job.name }}</h3>
+	<a class="underline text-blue-500 font-light" href="{{ job.company.apply_url }}">{{ job.company.name }}</a>
+	<p>{{ job.location }}</p> 
+
+	<div class="mt-4">
+		<h4 class="font-light text-xl">Employment Type</h4>
+		<a href="/?q={{ job.employment_type }}" class="text-xs mx-4 bg-slate-200 text-slate-700 w-fit px-3">
+			{{ job.employment_type }}
+		</a>
+	</div>
 
 	<div class="flex flex-col gap-2 mt-4">
-		<h1>{{ job.name }}</h1>
+		<h4 class="font-light text-xl">Job Details</h4>
+			
         <p>{{ job.description }}</p>
-		<p>EMPLOYER: {{ job.employer.username }}</p>
-		<p>Company Name: {{ job.company_name }}</p>
-		<p>Location: {{ job.location }}</p>
-		<p>Location: {{ job.category }}</p>
-		<p>Skills Required: {{ job.skills_required }}</p>
-		<p>Employment Type: {{ job.employment_type }}</p>
 		<p>Salary: {{ job.salary }} {{ job.currency }}</p>
-		<a href="{{ job.apply_link}}" class="bg-red-300 px-2 py-1 text-white">Apply Here</a>
+
 	</div>
+
+	<div class="my-4">
+		<h4 class="font-light text-xl">Skills Required</h4>
+		<p class="px-2">{{ job.skills_required }}</p>
+	</div>
+
+	<a href="{{ job.apply_link}}" class="bg-red-300 px-2 py-1 text-white">Apply Here</a>
 </div>
 {% endblock %}
