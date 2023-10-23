@@ -6,6 +6,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("job/<uuid:id>", views.getJob, name="job"),
     path("createJob/", views.createJob, name="createJob"),
+    path("myJobs/", views.getUserJobs, name="getUserJobs"),
     path("editJob/<uuid:id>", views.editJob, name="editJob"),
     path("deleteJob/<uuid:id>", views.deleteJob, name="deleteJob"),
     path("deleteSearch/<int:id>", views.deleteSearch, name="deleteSearch"),
