@@ -3,9 +3,14 @@
 
 {% block content %}
 <div class="mb-4">
-	<h3 class="font-semibold text-2xl">{{ job.name }}</h3>
-	<a class="underline text-blue-500 font-light" href="{{ job.company.apply_url }}">{{ job.company.name }}</a>
-	<p>{{ job.location }}</p> 
+	<div class="flex flex-row justify-between gap-8 items-center">
+		<div>	
+			<h3 class="font-semibold text-2xl">{{ job.name }}</h3>
+			<a class="underline text-blue-500 font-light" href="{{ job.company.apply_url }}">{{ job.company.name }}</a>
+			<p>{{ job.location }}</p> 
+		</div>
+		<a href="{{ job.apply_link}}" target="_blank" class="bg-blue-500 hover:bg-blue-400 border-blue-700 rounded-sm duration-300 px-5 py-2 w-fit h-fit text-white">Apply Here</a>
+	</div>
 
 	<div class="mt-4">
 		<h4 class="font-light text-xl">Employment Type</h4>
@@ -15,18 +20,21 @@
 	</div>
 
 	<div class="flex flex-col gap-2 mt-4">
-		<h4 class="font-light text-xl">Job Details</h4>
+		<h4 class="font-normal text-xl">Job Details</h4>
 			
-        <p>{{ job.description }}</p>
-		<p>Salary: {{ job.salary }} {{ job.currency }}</p>
+        <p class="font-light px-4">{{ job.description }}</p>
+
+		{% if job.salary %}
+			<h4 class="font-normal text-xl">Salary</h4>
+			<p class="font-light mx-4 text-normal bg-slate-200 text-slate-700 w-fit px-3">{{ job.salary }} {{ job.currency }}</p>
+		{% endif %}
 
 	</div>
 
 	<div class="my-4">
-		<h4 class="font-light text-xl">Skills Required</h4>
-		<p class="px-2">{{ job.skills_required }}</p>
+		<h4 class="font-normal text-xl">Skills Required</h4>
+		<p class="px-4 font-light">{{ job.skills_required }}</p>
 	</div>
 
-	<a href="{{ job.apply_link}}" class="bg-blue-500 px-2 py-1 text-white">Apply Here</a>
 </div>
 {% endblock %}

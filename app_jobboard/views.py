@@ -56,6 +56,13 @@ def getJob(request, id):
     context = { "job": job }
     return render(request, "jobboard/job.html", context)
 
+@login_required(login_url="auth:index")
+def getUserJobs(request):
+    userJobs = Job.objects.filter(employer=request.user)
+    context = {
+        "jobs": userJobs
+    }
+    return render(request, "jobboard/manageJobs.html", context)
 
 @login_required(login_url="auth:index")
 @employer_only
@@ -69,7 +76,8 @@ def createJob(request):
             form = jobForm.save(commit=False)
             form.employer = request.user
             form.save()
-            return redirect(request, "job")
+            print(form.id)
+            return redirect("jobboard:job", id=form.id)
             # return redirect(reverse("jobboard:index") + f"?job={form.id}")
     context = {"form": form}
     return render(request, "jobboard/createJob.html", context)

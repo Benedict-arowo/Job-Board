@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+
+{% block searchComponent %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col gap-4">
+        {% for job in jobs %}
+        <div class="flex flex-row justify-between px-2 py-2 border hover:shadow-md duration-300">
+            <div>
+                <a class="block" href="{% url 'jobboard:job' job.id %}">{{ job.name }}</>
+                <a>{{ job.company.name }}<a/>
+            </div>
+
+            <div>
+                <a href="{% url 'jobboard:editJob' job.id %}">edit job</a>
+                <a href="{% url 'jobboard:deleteJob' job.id %}">delete job</a>
+            </div>
+        </div>
+        {% empty%}
+
+        {% endfor %}
+    </div>
+{% endblock %}
