@@ -1,4 +1,5 @@
 {% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+{%load crispy_forms_tags %} 
 
 {% block aboveContent %}
 <div class="mt-4">
@@ -10,7 +11,7 @@
 <div>
     <form action="./" method="POST" class="my-4">
         {% csrf_token %}
-        {{ form.as_div }}
+        {{ form|crispy }}
         <button type="submit" class="bg-red-400 text-white p-4">Submit</button>
     </form>
 </div>
