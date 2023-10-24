@@ -91,9 +91,19 @@ class Bookmark(models.Model):
 class Company(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256)
+    description = models.TextField()
+    isLookingForEmployees = models.BooleanField(default=False)
     category = models.ForeignKey(CompanyCategory, on_delete=models.SET_NULL, null=True, blank=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 
     def __str__(self):
         return self.name
+
+class CompanyReviews(models.Model):
+    reviewer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    review = models.TextField(max_length=512)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+

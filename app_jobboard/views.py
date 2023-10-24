@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .models import Job, Search, Bookmark, Company
+from .models import Job, Search, Bookmark, Company, CompanyReviews
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from custom_decorators import employer_only
@@ -166,3 +166,20 @@ def deleteSearch(request, id):
         messages.error(request, "Error trying to delete search entry.")
 
     return redirect(reverse("jobboard:index") + "?tab=recent_searches")
+
+def companies(request):
+    companies = Company.objects.all()
+    context = {
+        "companies": companies
+    }
+    return render(request, "jobboard/companies.html", context)
+
+def company(request, id):
+    company = Company.objects.get(id=id)
+    reviews = CompanyReviews.objects.filter(company=company)
+        
+    context = {
+        "company": company,
+        "reviews": reviews
+    }
+    return render(request, "jobboard/company.html", context)

@@ -16,7 +16,7 @@
         <div class="flex flex-row justify-between px-2 py-2 border hover:shadow-md duration-300">
             <div>
                 <div class="flex flex-row gap-2 items-center">
-                    <a class="block text-lg">{{ company.name }}<a/>
+                    <a class="block text-lg" href="{% url 'jobboard:company' company.id %}">{{ company.name }}<a/>
                         <a href="" class="text-xs w-fit h-fit bg-slate-200 text-slate-700 px-3">
                             <!-- {{ job.employment_type }} -->
                         </a>
