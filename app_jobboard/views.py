@@ -168,10 +168,19 @@ def deleteSearch(request, id):
     return redirect(reverse("jobboard:index") + "?tab=recent_searches")
 
 def companies(request):
-    companies = Company.objects.all()
-    context = {
-        "companies": companies
-    }
+    q = request.GET.get('q')
+    tab = request.GET.get('tab')
+    context = { }
+
+    if q:
+        context['q'] = q
+        context['companies'] = Company.objects.filter(Q(name__icontains=q) | Q(description__icontains=q) | Q(category__name__icontains=q))
+    else:
+     context['companies']= Company.objects.all()
+
+    if tab:
+        context['tab'] = tab
+        
     return render(request, "jobboard/companies.html", context)
 
 def company(request, id):
