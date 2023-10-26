@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .models import Job, Search, Bookmark
+from .models import Job, Search, Bookmark, Company, CompanyReviews
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from custom_decorators import employer_only
@@ -67,6 +67,15 @@ def getUserJobs(request):
         context['jobs'] = Job.objects.filter(employer=request.user).order_by('-updated_at', 'created_at')
 
     return render(request, "jobboard/manageJobs.html", context)
+
+
+@login_required(login_url="auth:index")
+def getUserCompanies(request):
+    userCompanies = Company.objects.filter(owner=request.user)
+    context = {
+        "companies": userCompanies
+    }
+    return render(request, "jobboard/manageCompanies.html", context)
 
 @login_required(login_url="auth:index")
 @employer_only
@@ -161,3 +170,29 @@ def deleteSearch(request, id):
         messages.error(request, "Error trying to delete search entry.")
 
     return redirect(reverse("jobboard:index") + "?tab=recent_searches")
+
+def companies(request):
+    q = request.GET.get('q')
+    tab = request.GET.get('tab')
+    context = { }
+
+    if q:
+        context['q'] = q
+        context['companies'] = Company.objects.filter(Q(name__icontains=q) | Q(description__icontains=q) | Q(category__name__icontains=q))
+    else:
+     context['companies']= Company.objects.all()
+
+    if tab:
+        context['tab'] = tab
+        
+    return render(request, "jobboard/companies.html", context)
+
+def company(request, id):
+    company = Company.objects.get(id=id)
+    reviews = CompanyReviews.objects.filter(company=company)
+        
+    context = {
+        "company": company,
+        "reviews": reviews
+    }
+    return render(request, "jobboard/company.html", context)
