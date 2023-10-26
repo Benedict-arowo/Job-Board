@@ -33,7 +33,10 @@ class Job(models.Model):
 
     
     def __str__(self):
-        return f"{self.name} at {self.company_name} in {self.location}."
+        if self.company:
+            return f"{self.name} at {self.company.name} in {self.location}."
+        else:
+            return f"{self.name} in {self.location}."
 
 class JobSkill(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

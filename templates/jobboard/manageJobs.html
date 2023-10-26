@@ -1,16 +1,30 @@
 {% extends "layout.html" %} {% block title %} - Register {% endblock %} 
 
-{% block searchComponent %}
-
+{% block headerComponent %}
+    <header class="px-20">
+        <h1 class="w-full text-center text-4xl mt-8 mb-4 text-blue-500 font-bold">My Jobs</h1>
+        <div class="flex flex-row justify-between mb-3 gap-8">
+            <form class="flex flex-row gap-2 w-full" action="" method="get">
+                {% if q %}
+                <input placeholder="{{ q }}" class="px-2 py-1 rounded-sm w-full h-fit max-w-[500px]" type="text" name="q">
+                {% else %}
+                <input placeholder="Search..." class="px-2 py-1 rounded-sm w-full h-fit max-w-[500px]" type="text" name="q">
+                {% endif %}
+                <button class="bg-blue-500 h-fit hover:bg-blue-400 py-1 px-4 text-white duration-300 rounded-sm">Search</button>
+            </form>
+            <div class="flex flex-col text-end">
+                <p class="font-light text-gray-500 text-sm self-end">Currently displaying {{jobs.count}} jobs</p>
+                {% if q %}
+                    <a href="?q=" class="text-gray-500 underline text-xs">Clear filter</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
 {% endblock %}
 
 {% block content %}
 <div class="mb-4">
-    <h1 class="w-full text-center text-4xl mt-8 mb-4 text-blue-500 font-bold">My Jobs</h1>
-    <div class="flex flex-row justify-between mb-3 gap-8">
-        <input placeholder="Search..." class="px-2 py-1 rounded-sm w-full max-w-[400px]" type="text" name="q">        
-        <p class="font-light text-gray-500 text-sm self-end">Currently displaying {{jobs.count}} jobs</p>
-    </div>
+
     <div class="flex flex-col gap-4">
         {% for job in jobs %}
         <div class="flex flex-row justify-between px-2 py-2 border hover:shadow-md duration-300">
@@ -25,7 +39,7 @@
             </div>
 
             <div class="flex flex-row gap-3 items-center">
-                <a href="{% url 'jobboard:editJob' job.id %}?next={{ request.path }}">
+                <a href="{% url 'jobboard:editJob' job.id %}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                       </svg>                      

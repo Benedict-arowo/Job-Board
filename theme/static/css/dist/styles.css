@@ -901,6 +901,10 @@ select {
   height: 100vh;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .w-5 {
   width: 1.25rem;
 }
@@ -924,6 +928,10 @@ select {
 
 .max-w-\[400px\] {
   max-width: 400px;
+}
+
+.max-w-\[500px\] {
+  max-width: 500px;
 }
 
 .border-collapse {
@@ -968,6 +976,10 @@ select {
 
 .justify-start {
   justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .justify-center {
@@ -1116,9 +1128,19 @@ select {
   padding-right: 1.5rem;
 }
 
-.py-6 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.px-24 {
+  padding-left: 6rem;
+  padding-right: 6rem;
+}
+
+.px-20 {
+  padding-left: 5rem;
+  padding-right: 5rem;
 }
 
 .pt-8 {
@@ -1137,8 +1159,32 @@ select {
   padding-bottom: 1rem;
 }
 
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
+
+.pb-8 {
+  padding-bottom: 2rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
 .text-center {
   text-align: center;
+}
+
+.text-end {
+  text-align: end;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.align-bottom {
+  vertical-align: bottom;
 }
 
 .font-\[\'Poppins\'\] {

@@ -27,9 +27,9 @@ def index(request):
         except Search.DoesNotExist:
             search = Search.objects.create(user=request.user, search=q)
 
-        jobs = Job.objects.filter(Q(name__icontains=q) | Q(employment_type__icontains=q) | Q(location__icontains=q))
+        jobs = Job.objects.filter(Q(name__icontains=q) | Q(employment_type__icontains=q) | Q(location__icontains=q)).order_by('-updated_at', '-created_at')
     else:
-        jobs = Job.objects.all()
+        jobs = Job.objects.all().order_by('-updated_at', '-created_at')
 
     if id:
         job = Job.objects.get(id=id)
@@ -58,10 +58,14 @@ def getJob(request, id):
 
 @login_required(login_url="auth:index")
 def getUserJobs(request):
-    userJobs = Job.objects.filter(employer=request.user)
-    context = {
-        "jobs": userJobs
-    }
+    q = request.GET.get('q')
+    context = {}
+    if q:
+        context['q'] = q
+        context['jobs'] = Job.objects.filter(Q(employer=request.user) & (Q(name__icontains=q) | Q(location__icontains=q) | Q(employment_type__icontains=q))).order_by('-updated_at', '-created_at')
+    else:
+        context['jobs'] = Job.objects.filter(employer=request.user).order_by('-updated_at', 'created_at')
+
     return render(request, "jobboard/manageJobs.html", context)
 
 
