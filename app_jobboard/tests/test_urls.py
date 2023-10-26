@@ -1,11 +1,11 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from authentication.views import index, loginUser, registerUser, logoutUser
-
+from authentication.views import index as auth_index, loginUser, registerUser, logoutUser
+from app_jobboard.views import *
 class TestAuthUrls(SimpleTestCase):
     def test_auth_index_url(self):
         url = reverse('index')
-        self.assertEquals(resolve(url).func, index)
+        self.assertEquals(resolve(url).func, auth_index)
 
     def test_auth_login_url(self):
         url = reverse('login')
@@ -21,4 +21,23 @@ class TestAuthUrls(SimpleTestCase):
 
 
 class TestJobboardUrls(SimpleTestCase):
-    pass
+    def test_index_url(self):
+        url = reverse('')
+        self.assertEquals(resolve(url).func, index)
+    
+    def test_createJob_url(self):
+        url = reverse('createJob')
+        self.assertEquals(resolve(url).func, createJob)
+
+    def test_myjobs_url(self):
+        url = reverse('myJobs')
+        self.assertEquals(resolve(url).func, getUserJobs)
+
+    def test_mycompanies_url(self):
+        url = reverse('myCompanies')
+        self.assertEquals(resolve(url).func, getUserCompanies)
+    
+    def test_company_url(self):
+        url = reverse('company')
+        self.assertEquals(resolve(url).func, companies)
+    
