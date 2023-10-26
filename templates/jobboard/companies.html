@@ -1,9 +1,9 @@
 {% extends "layout.html" %} {% block title %} - Register {% endblock %} 
 
 {% block searchComponent %}
-		<div class="flex flex-col gap-4">
+		<div class="flex flex-col shadow-md pb-4 px-4">
 			<form
-				action="/company"
+				action="{% url 'jobboard:companies' %}"
 				class="flex flex-row gap-4 items-center w-full justify-center px-40 mt-12">
 				{% if q %}
 				<input
@@ -26,39 +26,44 @@
 					Search
 				</button>
 			</form>
-		
-			<div class="flex flex-row gap-8 justify-center mt-2">
-				{% if not user.is_authenticated %}
-					<p class="text-xl font-medium cursor-default text-blue-500">Company list<p/>
-				{% else %}
-					{% if tab == "recent_searches"%}
-					<a href="/company/?tab=" class="text-xl font-light">Company list</a>
-					<a href="/company/?tab=recent_searches" class="font-medium text-xl text-blue-500"
-						>Recent Searches</a
-					>
-					{% else%}
-					<a href="/company/?tab=" class="font-medium text-xl text-blue-500">Company List</a>
-					<a href="/company/?tab=recent_searches" class="font-light text-xl"
-						>Recent Searches</a
-					>
-					{% endif %}
-				{% endif %}
-			</div>
-		
-			<hr />
+			{% if q %}
+				<a href="?q=" class="font-light text-gray-500 text-sm underline cursor-pointer self-end">Clear search</a>
+			{% endif %}
 		</div>
 	{% endblock %}
 
-{% block aboveContent %}
-<div class="mt-4">
-	<h1 class="w-full bg-blue-500 text-white px-4 py-2 font-light text-2xl">Company List</h1>
-</div>
-{% endblock %}
 
 {% block content %}
-<div>
+<h1 class="w-full text-center text-4xl mt-8 mb-4 text-blue-500 font-bold">Company List</h1>
+<p class="font-light text-gray-500 text-sm self-end">Currently displaying {{companies.count}} company</p>
+<div class="mt-4">
     {% for company in companies %}
-    <a href="{% url 'jobboard:company' company.id %}">{{ company.name }}</a>
+	<div class="border w-full px-2 py-2 flex flex-row justify-between items-center">
+		<a href="{% url 'jobboard:company' company.id %}">{{ company.name }}</a>
+		<a class="bg-slate-200 text-slate-700 w-fit text-sm h-fit py-1 rounded-md px-3">
+			{{ company.category.name }}
+		</a>
+	</div>
+	{% empty %}
+	{% if q %}
+		<div class="w-full flex flex-col justify-start text-gray-400">
+			<p class="text-2xl font-light">
+				The search <strong>"{{ q }}"</strong> did not match any companies.
+			</p>
+			<h4 class="font-medium text-lg mt-4 text-gray-500">
+				Search suggestions:
+			</h4>
+			<ul class="list-disc list-inside font-light">
+				<li>Try more general keywords</li>
+				<li>Check your spelling</li>
+				<li>Replace abbreviations with the entire word</li>
+			</ul>
+		</div>
+	{% else %}
+		<p class="text-2xl font-light">
+			There are currently no companies available.
+		</p>
+	{% endif %}
     {% endfor %}
 </div>
 
