@@ -71,10 +71,15 @@ def getUserJobs(request):
 
 @login_required(login_url="auth:index")
 def getUserCompanies(request):
-    userCompanies = Company.objects.filter(owner=request.user)
-    context = {
-        "companies": userCompanies
-    }
+    q = request.GET.get('q')
+    context = { }
+
+    if q:
+        context['q'] = q
+        context['companies'] = Company.objects.filter(Q(owner=request.user) & Q(name__icontains=q) | Q(description__icontains=q) | Q(category__name__icontains=q))
+    else:
+     context['companies'] = Company.objects.filter(owner=request.user)
+     
     return render(request, "jobboard/manageCompanies.html", context)
 
 @login_required(login_url="auth:index")
