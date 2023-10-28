@@ -1,5 +1,8 @@
-{% extends "base.html" %} {% block title %} - Register {% endblock %} 
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
 
+{% block searchComponent %}
+
+{% endblock %}
 {% block content %}
 {% if mode == "register" %}
     <form action="/auth/register/" method="POST" class="flex flex-col gap-4">

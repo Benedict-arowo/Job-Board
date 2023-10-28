@@ -1,0 +1,23 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+{%load crispy_forms_tags %} 
+
+{% block aboveContent %}
+<div class="mt-4">
+	<h1 class="w-full bg-blue-500 text-white px-4 py-2 font-light text-2xl">Add a new company.</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<div>
+    {% if mode == "edit" %}
+        <form action="{% url 'jobboard:editCompany' company.id %}" method="POST" class="my-4">
+    {% else %}
+        <form action="{% url 'jobboard:createCompany' %}" method="POST" class="my-4">
+    {% endif %}
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="bg-red-400 text-white p-4">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
