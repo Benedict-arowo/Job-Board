@@ -1,0 +1,29 @@
+{% extends "layout.html" %} 
+
+{% block title %} 
+- Register 
+{% endblock %} 
+
+{% block searchComponent %}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="grid place-content-center mx-28 mt-8">
+	<header class="flex flex-row gap-4 justify-between">
+		<h1 class="font-light text-2xl">
+			{{ request.user.first_name }} {{ request.user.last_name }}
+		</h1>
+		<img class="rounded-full bg-blue-500 w-[72px] h-[72px]" src="{{ request.user.profile_picture }}" alt="{{ request.user.username }}'s profile picture"/>
+	</header>
+
+	<main>
+		<div>
+
+		</div>
+	</main>
+
+</div>
+
+{% endblock %}

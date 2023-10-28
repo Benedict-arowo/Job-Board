@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from authentication.views import index as auth_index, loginUser, registerUser, logoutUser
-from app_jobboard.views import *
+from app_jobboard.views_folder import *
 class TestAuthUrls(SimpleTestCase):
     def test_auth_index_url(self):
         url = reverse('index')

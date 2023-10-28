@@ -18,15 +18,22 @@ policy = PasswordPolicy.from_names(
     nonletters=2,  # need min. 2 non-letter characters (digits, specials, anything)
 )
 
+
 @guest_only
 def index(request):
     # TODO: Have the index page manage both the login and register template using JavaScript, so both loginUser, and registerUser view would only allow POST methods.
-    mode = request.GET.get('mode')
+    mode = request.GET.get("mode")
     if not mode:
         mode = "login"
-    roles = [{ "value": "EMPLOYER", "display_value": "Employer"}, { "value": "JOB SEEKER", "display_value": "Job Seeker"}]
-    
-    return render(request, "authentication/auth.html", context={"mode": mode, "roles": roles})
+    roles = [
+        {"value": "EMPLOYER", "display_value": "Employer"},
+        {"value": "JOB SEEKER", "display_value": "Job Seeker"},
+    ]
+
+    return render(
+        request, "authentication/auth.html", context={"mode": mode, "roles": roles}
+    )
+
 
 @guest_only
 @require_http_methods(["POST"])
@@ -53,6 +60,7 @@ def loginUser(request):
         messages.error(request, "Invalid username or password has been provided")
         return redirect("auth:index")
 
+
 @guest_only
 @require_http_methods(["POST"])
 def registerUser(request):
@@ -70,9 +78,7 @@ def registerUser(request):
         return redirect(reverse("auth:index") + "?mode=register")
 
     if not email or not password:
-        messages.error(
-            request, "You must provide a password, and an email address."
-        )
+        messages.error(request, "You must provide a password, and an email address.")
         return redirect("auth:index")
 
     print(validate_email(email))
@@ -87,7 +93,6 @@ def registerUser(request):
     if not role:
         messages.error(request, "You must provide a role.")
         return redirect("auth:index")
-
 
     try:
         User = CustomUser.objects.create(
@@ -106,8 +111,17 @@ def registerUser(request):
         return redirect("auth:index")
 
 
-
 @login_required(login_url="/auth")
 def logoutUser(request):
     logout(request)
     return redirect("auth:index")
+
+
+def user(request):
+    context = {}
+    return render(request, "authentication/user.html", context)
+
+
+def editUser(request):
+    context = {}
+    return render(request, "authentication/user.html", context)
