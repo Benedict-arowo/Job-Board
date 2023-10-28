@@ -31,19 +31,20 @@ class Job(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    
     def __str__(self):
         if self.company:
             return f"{self.name} at {self.company.name} in {self.location}."
         else:
             return f"{self.name} in {self.location}."
 
+
 class JobSkill(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
     class Meta:
-        verbose_name_plural = ('Job Skills')
+        verbose_name_plural = "Job Skills"
+
 
 class JobApplication(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -66,7 +67,8 @@ class CompanyCategory(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class Search(models.Model):
     search = models.CharField(max_length=255)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -79,7 +81,8 @@ class Search(models.Model):
 
     def __str__(self):
         return self.search
-    
+
+
 class Bookmark(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -90,18 +93,22 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return self.job.name
-    
+
+
 class Company(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256)
     description = models.TextField()
     isLookingForEmployees = models.BooleanField(default=False)
-    category = models.ForeignKey(CompanyCategory, on_delete=models.SET_NULL, null=True, blank=True)
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    location = models.TextField(max_length=255)
+    category = models.ForeignKey(
+        CompanyCategory, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
+
 
 class CompanyReviews(models.Model):
     reviewer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
@@ -109,4 +116,3 @@ class CompanyReviews(models.Model):
     review = models.TextField(max_length=512)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-

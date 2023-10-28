@@ -40,9 +40,11 @@
     {% for company in companies %}
 	<div class="border w-full px-2 py-2 flex flex-row justify-between items-center">
 		<a href="{% url 'jobboard:company' company.id %}">{{ company.name }}</a>
-		<a class="bg-slate-200 text-slate-700 w-fit text-sm h-fit py-1 rounded-md px-3">
-			{{ company.category.name }}
-		</a>
+		{% if company.category %}
+			<a class="bg-slate-200 text-slate-700 w-fit text-sm h-fit py-1 rounded-md px-3">
+				{{ company.category.name }}
+			</a>
+		{% endif %}
 	</div>
 	{% empty %}
 	{% if q %}

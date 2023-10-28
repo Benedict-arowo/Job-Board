@@ -6,7 +6,9 @@
 	<div class="flex flex-row justify-between gap-8 items-center">
 		<div>	
 			<h3 class="font-semibold text-2xl">{{ job.name }}</h3>
-			<a class="underline text-blue-500 font-light" href="{% url 'jobboard:company' job.company.id %}">{{ job.company.name }}</a>
+			{% if job.company %}
+				<a class="underline text-blue-500 font-light" href="{% url 'jobboard:company' job.company.id %}">{{ job.company.name }}</a>
+			{% endif %}
 			<p>{{ job.location }}</p> 
 		</div>
 		<a href="{{ job.apply_link}}" target="_blank" class="bg-blue-500 hover:bg-blue-400 border-blue-700 rounded-sm duration-300 px-5 py-2 w-fit h-fit text-white">Apply Here</a>
