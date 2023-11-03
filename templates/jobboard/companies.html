@@ -1,0 +1,72 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+
+{% block searchComponent %}
+		<div class="flex flex-col shadow-md pb-4 px-4">
+			<form
+				action="{% url 'jobboard:companies' %}"
+				class="flex flex-row gap-4 items-center w-full justify-center px-40 mt-12">
+				{% if q %}
+				<input
+					type="text"
+					name="q"
+					id="q"
+					placeholder="{{ q }}"
+					class="py-3 rounded-md font-light w-full" />
+				{% else %}
+				<input
+					type="text"
+					name="q"
+					id="q"
+					placeholder="Company name or keywords"
+					class="py-3 rounded-md font-light w-full" />
+				{% endif %}
+				<button
+					type="submit"
+					class="w-fit h-fit px-4 py-2 bg-blue-500 text-white">
+					Search
+				</button>
+			</form>
+			{% if q %}
+				<a href="?q=" class="font-light text-gray-500 text-sm underline cursor-pointer self-end">Clear search</a>
+			{% endif %}
+		</div>
+	{% endblock %}
+
+
+{% block content %}
+<h1 class="w-full text-center text-4xl mt-8 mb-4 text-blue-500 font-bold">Company List</h1>
+<p class="font-light text-gray-500 text-sm self-end">Currently displaying {{companies.count}} company</p>
+<div class="mt-4">
+    {% for company in companies %}
+	<div class="border w-full px-2 py-2 flex flex-row justify-between items-center">
+		<a href="{% url 'jobboard:company' company.id %}">{{ company.name }}</a>
+		{% if company.category %}
+			<a class="bg-slate-200 text-slate-700 w-fit text-sm h-fit py-1 rounded-md px-3">
+				{{ company.category.name }}
+			</a>
+		{% endif %}
+	</div>
+	{% empty %}
+	{% if q %}
+		<div class="w-full flex flex-col justify-start text-gray-400">
+			<p class="text-2xl font-light">
+				The search <strong>"{{ q }}"</strong> did not match any companies.
+			</p>
+			<h4 class="font-medium text-lg mt-4 text-gray-500">
+				Search suggestions:
+			</h4>
+			<ul class="list-disc list-inside font-light">
+				<li>Try more general keywords</li>
+				<li>Check your spelling</li>
+				<li>Replace abbreviations with the entire word</li>
+			</ul>
+		</div>
+	{% else %}
+		<p class="text-2xl font-light">
+			There are currently no companies available.
+		</p>
+	{% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

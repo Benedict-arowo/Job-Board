@@ -1,0 +1,36 @@
+{% extends "layout.html" %} {% block title %} - Register {% endblock %} 
+
+{% block searchComponent %}
+
+{% endblock %}
+{% block content %}
+{% if mode == "register" %}
+    <form action="/auth/register/" method="POST" class="flex flex-col gap-4">
+        {% csrf_token %}
+        <h1>Register</h1>
+        <input type="text" name="email" id="email" placeholder="email">
+        <input type="text" name="password" id="password" placeholder="password">
+        <input type="text" name="first_name" id="first_name" placeholder="first_name">
+        <input type="text" name="last_name" id="last_name" placeholder="last_name">
+        <input type="text" name="middle_name" id="middle_name" placeholder="middle_name">
+        <label for="role">Role: </label>
+        <select name="role" id="role">
+            {% for role in roles %}
+                <option value="{{ role.value }}">{{ role.display_value }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="bg-red-400 text-white py-2">Submit</button>
+        <p>Already have an account? <a href="./">Login here</a></p>
+    </form>
+{% else %}
+    <form method="POST" action="/auth/login/" class="flex flex-col gap-4">
+        {% csrf_token %}
+        <h1>Login</h1>
+        <input type="email" name="email" id="email">
+        <input type="password" name="password" id="password">
+        <button type="submit" class="bg-red-400 text-white py-2">Submit</button>
+
+        <p>Don't have an account yet? <a href="./?mode=register">Register here</a></p>
+    </form>
+{% endif %}
+{% endblock %}

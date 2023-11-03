@@ -44,7 +44,10 @@ INSTALLED_APPS = [
     "app_jobboard.apps.AppJobboardConfig",
     "authentication.apps.AuthenticationConfig",
     "tailwind",
-    "theme"
+    "theme",
+    "django_browser_reload",
+    "crispy_forms",
+    "crispy_bootstrap4",
 ]
 
 MIDDLEWARE = [
@@ -55,6 +58,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 AUTH_USER_MODEL = "authentication.CustomUser"
@@ -130,5 +134,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-TAILWIND_APP_NAME = 'theme'
+TAILWIND_APP_NAME = "theme"
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"

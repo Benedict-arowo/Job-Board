@@ -1,0 +1,6 @@
+console.log("Howdy!")
+const searchInput = document.getElementById("q")
+
+q.addEventListener("onchange", (e) => {
+    console.log(e.target.value);
+})
