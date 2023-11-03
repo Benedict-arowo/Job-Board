@@ -1,6 +1,6 @@
 from app_jobboard.models import Company, CompanyReviews, Job
 from django.shortcuts import render, redirect
-from ..forms import CompanyForm
+from ..forms import CompanyForm, ReviewForm
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,8 +10,14 @@ def company(request, id):
     company = Company.objects.get(id=id)
     reviews = CompanyReviews.objects.filter(company=company)
     jobs = Job.objects.filter(company=company)
+    reviewForm = ReviewForm()
 
-    context = {"company": company, "reviews": reviews, "jobs": jobs}
+    context = {
+        "company": company,
+        "reviews": reviews,
+        "jobs": jobs,
+        "reviewForm": reviewForm,
+    }
     return render(request, "jobboard/company.html", context)
 
 
