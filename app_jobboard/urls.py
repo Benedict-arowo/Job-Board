@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views_folder import company_views
+from .views_folder import company_views, company_reviews
 
 app_name = "jobboard"
 urlpatterns = [
@@ -18,8 +18,12 @@ urlpatterns = [
         views.removeJobFromBookmark,
         name="removeBookmark",
     ),
-    
     path("company/<uuid:id>", company_views.company, name="company"),
+    path(
+        "company/<uuid:companyId>/createReview/",
+        company_reviews.create_review,
+        name="createCompanyReview",
+    ),
     path("company/create", company_views.createCompany, name="createCompany"),
     path("company/edit/<uuid:id>", company_views.editCompany, name="editCompany"),
     path("company/delete/<uuid:id>", company_views.deleteCompany, name="deleteCompany"),

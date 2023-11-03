@@ -1,5 +1,5 @@
 from django import forms
-from .models import Job, Company
+from .models import Job, Company, CompanyReviews
 
 
 class JobForm(forms.ModelForm):
@@ -14,3 +14,10 @@ class CompanyForm(forms.ModelForm):
         model = Company
         fields = "__all__"
         exclude = ["owner"]
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = CompanyReviews
+        fields = "__all__"
+        exclude = ["reviewer", "company"]
