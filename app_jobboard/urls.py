@@ -18,15 +18,11 @@ urlpatterns = [
         views.removeJobFromBookmark,
         name="removeBookmark",
     ),
-    path("company/<uuid:id>", company_views.company, name="company"),
-    path(
-        "company/<uuid:companyId>/createReview/",
-        company_reviews.create_review,
-        name="createCompanyReview",
-    ),
-    path("company/create", company_views.createCompany, name="createCompany"),
-    path("company/edit/<uuid:id>", company_views.editCompany, name="editCompany"),
-    path("company/delete/<uuid:id>", company_views.deleteCompany, name="deleteCompany"),
+    
+    path("company/<uuid:id>/", company_views.company, name="company"),
+    path("company/create/", company_views.createCompany, name="createCompany"),
+    path("company/edit/<uuid:id>/", company_views.editCompany, name="editCompany"),
+    path("company/delete/<uuid:id>/", company_views.deleteCompany, name="deleteCompany"),
     path("companies/", company_views.userCompanies, name="userCompanies"),
 ]
 

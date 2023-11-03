@@ -4,7 +4,7 @@ from ..forms import CompanyForm, ReviewForm
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.http import HttpResponseRedirect
 
 def company(request, id):
     company = Company.objects.get(id=id)
@@ -54,6 +54,7 @@ def editCompany(request, id):
             "mode": "edit",
             "company": company,
         }
+
         return render(request, "company/create.html", context)
     except Company.DoesNotExist:
         messages.error(request, "Error trying to find company.")
