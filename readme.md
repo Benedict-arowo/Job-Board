@@ -20,6 +20,7 @@ A job board web application built using Django and Tailwind CSS. This project al
 -   [x] Companies, being able to create, delete, and edit a company.
 -   [x] Job posting with details such as job title, description, company name, location, and more.
 -   [x] Job searching with filtering options.
+-   [ ] Company reviews
 -   [ ] User profiles and company profiles for employers.
 -   [ ] Email notifications for important events (e.g., new job postings, job applications).
 -   [x] User dashboard to job listings.

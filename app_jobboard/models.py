@@ -112,7 +112,7 @@ class Company(models.Model):
 
 class CompanyReviews(models.Model):
     reviewer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     review = models.TextField(max_length=512)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
