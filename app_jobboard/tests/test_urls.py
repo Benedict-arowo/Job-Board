@@ -1,43 +1,44 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from authentication.views import index as auth_index, loginUser, registerUser, logoutUser
-from app_jobboard.views_folder import *
+from authentication.views import index as authIndex, loginUser, registerUser, logoutUser
+from app_jobboard.views import index, createJob, getUserJobs, companies
+from app_jobboard.views_folder import company_views
 class TestAuthUrls(SimpleTestCase):
     def test_auth_index_url(self):
-        url = reverse('index')
-        self.assertEquals(resolve(url).func, auth_index)
+        url = reverse('auth:index')
+        self.assertEqual(resolve(url).func, authIndex)
 
     def test_auth_login_url(self):
-        url = reverse('login')
-        self.assertEquals(resolve(url).func, loginUser)
+        url = reverse('auth:login')
+        self.assertEqual(resolve(url).func, loginUser)
 
     def test_auth_register_url(self):
-        url = reverse('register')
-        self.assertEquals(resolve(url).func, registerUser)
+        url = reverse('auth:register')
+        self.assertEqual(resolve(url).func, registerUser)
 
     def test_auth_logout_url(self):
-        url = reverse('logout')
-        self.assertEquals(resolve(url).func, logoutUser)
+        url = reverse('auth:logout')
+        self.assertEqual(resolve(url).func, logoutUser)
 
 
 class TestJobboardUrls(SimpleTestCase):
     def test_index_url(self):
-        url = reverse('')
-        self.assertEquals(resolve(url).func, index)
+        url = reverse('jobboard:index')
+        self.assertEqual(resolve(url).func, index)
     
     def test_createJob_url(self):
-        url = reverse('createJob')
-        self.assertEquals(resolve(url).func, createJob)
+        url = reverse('jobboard:createJob')
+        self.assertEqual(resolve(url).func, createJob)
 
     def test_myjobs_url(self):
-        url = reverse('myJobs')
-        self.assertEquals(resolve(url).func, getUserJobs)
+        url = reverse('jobboard:getUserJobs')
+        self.assertEqual(resolve(url).func, getUserJobs)
 
     def test_mycompanies_url(self):
-        url = reverse('myCompanies')
-        self.assertEquals(resolve(url).func, getUserCompanies)
+        url = reverse('jobboard:userCompanies')
+        self.assertEqual(resolve(url).func, company_views.userCompanies)
     
     def test_company_url(self):
-        url = reverse('company')
-        self.assertEquals(resolve(url).func, companies)
+        url = reverse('jobboard:companies')
+        self.assertEqual(resolve(url).func, companies)
     
