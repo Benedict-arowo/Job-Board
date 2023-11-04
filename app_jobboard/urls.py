@@ -28,7 +28,7 @@ urlpatterns = [
         company_reviews.create_review,
         name="createCompanyReview",
     ),
-    path("review/edit/<uuid:id>", company_reviews.edit_review, name="editReview"),
+    path("review/edit/<int:id>", company_reviews.edit_review, name="editReview"),
 ]
 
 # TODO: Organize URLS into separate files.

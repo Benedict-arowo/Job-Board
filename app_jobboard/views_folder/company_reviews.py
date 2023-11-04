@@ -33,6 +33,9 @@ def create_review(request, companyId):
 def edit_review(request, id):
     try:
         review = CompanyReviews.objects.get(id=id)
+        if request.user != review.reviewer:
+            messages.error(request, "You do not have permission to carry out this action.")
+            return redirect("jobboard:index")
     except review.DoesNotExist:
         messages.error(request, "Review does not exist.")
         return redirect("jobboard:index")
