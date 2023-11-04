@@ -76,6 +76,7 @@
 				<p>{{ review.review }}</p>
 				{% if review.reviewer == request.user %}
 				<a data-id="{{ review.id }}" href="">Edit</a>
+				<a href="{% url 'jobboard:deleteReview' id=review.id %}">Delete</a>
 				{% endif %}
 			</div>
 			{% endfor %}

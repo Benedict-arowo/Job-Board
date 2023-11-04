@@ -18,7 +18,7 @@ urlpatterns = [
         views.removeJobFromBookmark,
         name="removeBookmark",
     ),
-    path("company/<uuid:id>", company_views.company, name="company"),
+    path("company/<uuid:id>/", company_views.company, name="company"),
     path("company/create", company_views.createCompany, name="createCompany"),
     path("company/edit/<uuid:id>", company_views.editCompany, name="editCompany"),
     path("company/delete/<uuid:id>", company_views.deleteCompany, name="deleteCompany"),
@@ -29,6 +29,7 @@ urlpatterns = [
         name="createCompanyReview",
     ),
     path("review/edit/<int:id>", company_reviews.edit_review, name="editReview"),
+    path("review/delete/<int:id>", company_reviews.delete_review, name="deleteReview"),
 ]
 
 # TODO: Organize URLS into separate files.

@@ -47,3 +47,16 @@ def edit_review(request, id):
     else:
         messages.error(request, "Error trying to edit review.")
         return redirect("jobboard:company", id=form.company.id)
+
+def delete_review(request, id):
+    try:
+        review = CompanyReviews.objects.get(id=id)
+        if request.user != review.reviewer:
+            messages.error(request, "You do not have permission to carry out this action.")
+            return redirect("jobboard:index")
+    except review.DoesNotExist:
+        messages.error(request, "Review does not exist.")
+        return redirect("jobboard:index")
+    
+    review.delete()
+    return redirect("jobboard:company", id=review.company.id)
