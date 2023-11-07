@@ -18,13 +18,14 @@ def index(request):
     if q:
         q = q.lower()
         context["q"] = q.capitalize()
-        # search = Search.objects.get_or_create(search=q.lower(), user=request.user)
-        try:
-            search = Search.objects.get(user=request.user, search=q)
-            search.count += 1
-            search.save()
-        except Search.DoesNotExist:
-            search = Search.objects.create(user=request.user, search=q)
+        
+        if request.user.is_authenticated:
+            try:
+                search = Search.objects.get(user=request.user, search=q)
+                search.count += 1
+                search.save()
+            except Search.DoesNotExist:
+                search = Search.objects.create(user=request.user, search=q)
 
         jobs = Job.objects.filter(
             Q(name__icontains=q)
