@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=255)
     profile_picture = models.FileField(upload_to="profile-pictures/", null=True)
     verified_email = models.BooleanField(default=False)
-    phone_number = models.IntegerField(blank=True)
+    phone_number = models.IntegerField(blank=True, null=True)
     country = models.CharField(blank=True, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
 

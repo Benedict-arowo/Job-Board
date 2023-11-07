@@ -90,9 +90,6 @@ def registerUser(request):
         messages.error(request, "The password provided is not strong enough.")
         return redirect("auth:index")
 
-    if not role:
-        messages.error(request, "You must provide a role.")
-        return redirect("auth:index")
 
     try:
         User = CustomUser.objects.create(
@@ -101,12 +98,12 @@ def registerUser(request):
             first_name=first_name,
             last_name=last_name,
             middle_name=middle_name,
-            role=role,
         )
         User.save()
         login(request=request, user=User)
         return redirect("jobboard:index")
-    except:
+    except Exception as e:
+        print(e)
         messages.error(request, "Error trying to create your account.")
         return redirect("auth:index")
 
